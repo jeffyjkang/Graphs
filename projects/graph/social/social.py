@@ -204,3 +204,16 @@ if __name__ == '__main__':
 
 # client also interested in how the performace will scale as more users join
 # implement feature that creates large numbers of users to the network and assigns random distribution of friends
+
+# 3 Questions:
+
+# 1. To create 100 users with an average of 10 friends each, how many times would
+# you need to call addFriendship()? why?
+
+# total = avg * num_users
+# total = 10 * 100
+# 1000 / 2 = 500
+
+# 2. If you create 1000 users with an avg of 5 random friends, what percentage of
+# the other users will be in a particular user's extended social network?
+# what is the average degree of separation between a user and those in his/her extended network?
