@@ -84,8 +84,12 @@ class SocialGraph:
         # print(possibleFriendships)
         # use the fisher-yates shuffle, to randomize possibleFriendships,
         random.shuffle(possibleFriendships)
+        possibleFriendships = possibleFriendships[:20]
         # print(possibleFriendships)
-        print(possibleFriendships[:20])
+        for i in possibleFriendships:
+            # print(f'user:{i[0]},friend:{i[1]}')
+            if i[0] in self.friendships and i[1] in self.friendships:
+                self.friendships[i[0]].add(i[1])
         # print(len(possibleFriendships))
 
     def getAllSocialPaths(self, userID):
@@ -108,7 +112,7 @@ if __name__ == '__main__':
     sg = SocialGraph()
     sg.populateGraph(10, 2)
     # print(sg.users)
-    # print(sg.friendships)
+    print(sg.friendships)
     connections = sg.getAllSocialPaths(1)
     # print(connections)
 
