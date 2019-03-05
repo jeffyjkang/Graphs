@@ -92,6 +92,8 @@ class SocialGraph:
                 self.friendships[i[0]].add(i[1])
         # print(len(possibleFriendships))
 
+    # method getAllSocialPaths takes a userID and returns a dict containing every user in that user's
+    # extended network along with the shortest friendship path between each
     def getAllSocialPaths(self, userID):
         """
         Takes a user's userID as an argument
@@ -103,7 +105,60 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        print(self.friendships)
+
+        if userID not in self.friendships:
+            return "not valid userID"
+        # for each key in friendships dict, do a bfs, and find shortest path between each
+        # value, if path does not exist skip
+        for friendID in self.friendships:
+            # print(friendID)
+            # print(userID)
+            route = self.bfs(f'{userID}', friendID)
+            if route:
+                visited[friendID] = route
+        # print(f'visited: {visited}')
         return visited
+
+    def bfs(self, starting_vertex_id, destination_vertex_id):
+        queue = Queue()
+        visited = set()
+        queue.enqueue(starting_vertex_id)
+        # print(f'queue: {queue}')
+        while queue.size() > 0:
+            path = queue.dequeue()
+            # print(f'path: {path}')
+            vertex = path[-1]
+            if vertex not in visited:
+                # print(f'vertex: {vertex}')
+                visited.add(vertex)
+                for neighbor in self.friendships[int(vertex)]:
+                    route = list(path)
+                    # print(f'route: {route}')
+                    route.append(neighbor)
+                    # print(f'route after append: {route}')
+                    queue.enqueue(route)
+                    if neighbor == destination_vertex_id:
+                        return route
+                    else:
+                        pass
+
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+
+    def enqueue(self, value):
+        self.queue.append(value)
+
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+
+    def size(self):
+        return (len(self.queue))
 
 
 # test where a social graph is created
@@ -112,9 +167,9 @@ if __name__ == '__main__':
     sg = SocialGraph()
     sg.populateGraph(10, 2)
     # print(sg.users)
-    print(sg.friendships)
+    # print(sg.friendships)
     connections = sg.getAllSocialPaths(1)
-    # print(connections)
+    print(connections)
 
 # avg = total/count
 # 2 = total/10
