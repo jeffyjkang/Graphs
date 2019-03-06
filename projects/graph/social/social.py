@@ -84,13 +84,17 @@ class SocialGraph:
         # print(possibleFriendships)
         # use the fisher-yates shuffle, to randomize possibleFriendships,
         random.shuffle(possibleFriendships)
-        possibleFriendships = possibleFriendships[:20]
-        # print(possibleFriendships)
-        for i in possibleFriendships:
-            # print(f'user:{i[0]},friend:{i[1]}')
-            if i[0] in self.friendships and i[1] in self.friendships:
-                self.friendships[i[0]].add(i[1])
+        #
+        # possibleFriendships = possibleFriendships[:20]
+        # # print(possibleFriendships)
+        # for i in possibleFriendships:
+        #     # print(f'user:{i[0]},friend:{i[1]}')
+        #     if i[0] in self.friendships and i[1] in self.friendships:
+        #         self.friendships[i[0]].add(i[1])
         # print(len(possibleFriendships))
+
+        for friendship in possibleFriendships[: (numUsers * avgFriendships)//2]:
+            self.addFriendship(friendship[0], friendship[1])
 
     # method getAllSocialPaths takes a userID and returns a dict containing every user in that user's
     # extended network along with the shortest friendship path between each
@@ -105,19 +109,34 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
-        print(self.friendships)
+        #
+        # print(self.friendships)
 
-        if userID not in self.friendships:
-            return "not valid userID"
-        # for each key in friendships dict, do a bfs, and find shortest path between each
-        # value, if path does not exist skip
-        for friendID in self.friendships:
-            # print(friendID)
-            # print(userID)
-            route = self.bfs(f'{userID}', friendID)
-            if route:
-                visited[friendID] = route
-        # print(f'visited: {visited}')
+        # if userID not in self.friendships:
+        #     return "not valid userID"
+        # # for each key in friendships dict, do a bfs, and find shortest path between each
+        # # value, if path does not exist skip
+        # for friendID in self.friendships:
+        #     # print(friendID)
+        #     # print(userID)
+        #     route = self.bfs(f'{userID}', friendID)
+        #     if route:
+        #         visited[friendID] = route
+        # # print(f'visited: {visited}')
+        # return visited
+        #
+        q = Queue()
+        q.enqueue([userID])
+        while q.size() > 0:
+            path = q.dequeue()
+            newUserID = path[-1]
+            if newUserID not in visited:
+                visited[newUserID] = path
+                for friendID in self.friendships[newUserID]:
+                    if friendID not in visited:
+                        new_path = list(path)
+                        new_path.append(friendID)
+                        q.enqueue(new_path)
         return visited
 
     def bfs(self, starting_vertex_id, destination_vertex_id):
@@ -165,11 +184,18 @@ class Queue():
 # then the social graph is populated with 10 users and an average of two friends
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populateGraph(10, 2)
+    sg.populateGraph(1000, 5)
     # print(sg.users)
-    # print(sg.friendships)
+    print(sg.friendships[1])
+    print("********")
     connections = sg.getAllSocialPaths(1)
     print(connections)
+    print("********")
+    print(len(connections))
+    total_len = 0
+    for friendID in connections:
+        total_len += len(connections[friendID])
+    print(f"avg length: {total_len/ len(connections)}")
 
 # avg = total/count
 # 2 = total/10
