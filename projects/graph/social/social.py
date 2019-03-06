@@ -243,3 +243,5 @@ if __name__ == '__main__':
 # 2. If you create 1000 users with an avg of 5 random friends, what percentage of
 # the other users will be in a particular user's extended social network?
 # what is the average degree of separation between a user and those in his/her extended network?
+# 99%
+# 5 deg avg
