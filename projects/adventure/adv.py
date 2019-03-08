@@ -380,25 +380,25 @@ def find_nearest_unexplored(graph, starting_room_id):
     # walk along that traversal path
 
 
-inverseDirections = {'n': 's', 's': 'n', 'w': 'e', 'e': 'w'}
-while len(graph) < 9:
-    previousRoom = None
-    # If the room doesn't exist, initialize in your room graph with '?' exits
-    if player.currentRoom.id not in graph:
-        graph[player.currentRoom.id] = {}
-        for exits in player.currentRoom.getExits():
-            graph[player.currentRoom.id][exits] = '?'
-            # do something
-    previousRoom = player.currentRoom.id
-    dirToMove = 'n'
-    player.travel('n')
-    if previousRoom is not None:
-        graph[previousRoom][dirToMove] = player.currentRoom.id
-            # graph[0]['n'] = 4
-            # opposite directions
-        oppositeDirection = inverseDirections[dirToMove]
-        graph[player.currentRoom.id][oppositeDirection] = previousRoom
-    find_nearest_unexplored(graph, player.currentRoom.id
+# inverseDirections = {'n': 's', 's': 'n', 'w': 'e', 'e': 'w'}
+# while len(graph) < 9:
+#     previousRoom = None
+#     # If the room doesn't exist, initialize in your room graph with '?' exits
+#     if player.currentRoom.id not in graph:
+#         graph[player.currentRoom.id] = {}
+#         for exits in player.currentRoom.getExits():
+#             graph[player.currentRoom.id][exits] = '?'
+#             # do something
+#     previousRoom = player.currentRoom.id
+#     dirToMove = 'n'
+#     player.travel('n')
+#     if previousRoom is not None:
+#         graph[previousRoom][dirToMove] = player.currentRoom.id
+#             # graph[0]['n'] = 4
+#             # opposite directions
+#         oppositeDirection = inverseDirections[dirToMove]
+#         graph[player.currentRoom.id][oppositeDirection] = previousRoom
+#         find_nearest_unexplored(graph, player.currentRoom.id
      # update graph entry
 
 # currentRoomExits = graph[player.currentRoom.id]
@@ -424,3 +424,59 @@ while len(graph) < 9:
 
 # print(graph)
 # print(traversalPath)
+
+
+#     previousRoom = None
+#     # If the room doesn't exist, initialize in your room graph with '?' exits
+#     if player.currentRoom.id not in graph:
+#         graph[player.currentRoom.id] = {}
+#         for exits in player.currentRoom.getExits():
+#             graph[player.currentRoom.id][exits] = '?'
+#             # do something
+#     previousRoom = player.currentRoom.id
+#     dirToMove = 'n'
+#     player.travel('n')
+#     if previousRoom is not None:
+#         graph[previousRoom][dirToMove] = player.currentRoom.id
+#             # graph[0]['n'] = 4
+#             # opposite directions
+#         oppositeDirection = inverseDirections[dirToMove]
+#         graph[player.currentRoom.id][oppositeDirection] = previousRoom
+#         find_nearest_unexplored(graph, player.currentRoom.id
+
+inverseDirections = {'n': 's', 's': 'n', 'w': 'e', 'e': 'w'}
+
+previousRoom = None
+
+# if room doesnt exist
+if player.currentRoom.id not in graph:
+    # initialize graph
+    graph[player.currentRoom.id] = {}
+    # for each available exit in current room, get exits
+    for exits in player.currentRoom.getExits():
+        # assign the exits with questionmark in graph
+        graph[player.currentRoom.id][exits] = '?'
+    # randomly choose which way to go
+    currentRoomExits = graph[player.currentRoom.id]
+    # available directions in current room
+
+    for directions in currentRoomExits:
+        if currentRoomExits[directions] == '?':
+            print(f'directions: {directions}')
+            dirToMove = directions
+
+        player.travel(directions)
+        traversalPath.append(directions)
+        # if previousRoom is not None:
+        graph[previousRoom][dirToMove] = player.currentRoom.id
+        oppositeDirection = inverseDirections[dirToMove]
+        graph[player.currentRoom.id][oppositeDirection] = previousRoom
+        # print(f'previousRoom: {previousRoom}')
+
+        # print(f'current room: {player.currentRoom}')
+        # print(f'current room exits: {currentRoomExits}')
+
+previousRoom = player.currentRoom.id
+
+print(graph)
+print(traversalPath)
