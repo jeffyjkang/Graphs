@@ -181,16 +181,22 @@ def dft(rooms, position, visited):
     # print(position.currentRoom.getExits())
     # print(visited)
     # update the key of graph to exits with ?
-
+    if position.currentRoom.id not in visited:
+        visited[player.currentRoom.id] = {}
+        for exit in position.currentRoom.getExits():
+            visited[position.currentRoom.id][exit] = '?'
     # print(stack)
     while stack.size() > 0:
         vertex = stack.pop()
         print(f'vertex {vertex}')
-        if vertex not in visited:
-            visited[player.currentRoom.id] = {}
-            for exit in position.currentRoom.getExits():
-                visited[position.currentRoom.id][exit] = '?'
-                # print(visited)
+        print(f'visited: {visited}')
+        # if vertex not in visited:
+        if visited[vertex]['n'] == '?' or visited[vertex]['s'] == '?' or visited[vertex]['w'] == '?' or visited[vertex]['e'] == '?':
+            # print(f'visited at vertex: {visited[vertex].values()}')
+            # k = ['n', 's', 'w', 'e']
+            # if visited[vertex].values() == '?':
+            #     print(f' v: {visited}')
+            # print(visited)
             # print(position.currentRoom.n_to)
             # print(visited[position.currentRoom.id]['n'])
             if visited[position.currentRoom.id]['n'] == '?':
@@ -208,7 +214,8 @@ def dft(rooms, position, visited):
                 visited[position.currentRoom.id]['s'] = previousRoom
                 # print(position.currentRoom)
                 traversalPath.append('n')
-                # dft(rooms, position, visited)
+                print(f'inside if: {visited}')
+                dft(rooms, position, visited)
             if visited[position.currentRoom.id]['s'] == '?':
                 # while position.currentRoom.s_to:
                 previousRoom = position.currentRoom.id
@@ -224,7 +231,7 @@ def dft(rooms, position, visited):
                 visited[position.currentRoom.id]['n'] = previousRoom
                 # print(position.currentRoom)
                 traversalPath.append('s')
-                # dft(rooms, position, visited)
+                dft(rooms, position, visited)
             if visited[position.currentRoom.id]['w'] == '?':
                 # while position.currentRoom.w_to:
                 previousRoom = position.currentRoom.id
@@ -240,7 +247,7 @@ def dft(rooms, position, visited):
                 visited[position.currentRoom.id]['e'] = previousRoom
                 # print(position.currentRoom)
                 traversalPath.append('w')
-                # dft(rooms, position, visited)
+                dft(rooms, position, visited)
             if visited[position.currentRoom.id]['e'] == '?':
                 # while position.currentRoom.e_to:
                 previousRoom = position.currentRoom.id
@@ -256,9 +263,10 @@ def dft(rooms, position, visited):
                 visited[position.currentRoom.id]['w'] = previousRoom
                 # print(position.currentRoom)
                 traversalPath.append('e')
-                # dft(rooms, position, visited)
+                dft(rooms, position, visited)
         # return position.currentRoom
-        return position
+        else:
+            return position
         # if visited[player.currentRoom.id]['n'] != '?' or visited[player.currentRoom.id]['s'] != '?' or visited[player.currentRoom.id]['w'] != '?' or visited[player.currentRoom.id]['e'] != '?':
         #         break
 
