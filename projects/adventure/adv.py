@@ -41,67 +41,20 @@ graph = {}
 # using the created world, invoke printRooms() which prints all rooms into the terminal
 world.printRooms()
 
-
-# TRAVERSAL TEST
-# assign visited_rooms to a set
-visited_rooms = set()
-# assign the player's current room to the world's starting room which is set to 0
-player.currentRoom = world.startingRoom
-# add current room that the player is in to the visited room set
-visited_rooms.add(player.currentRoom)
-# loops through the traversal path list and iterates through move
-for move in traversalPath:
-    # invoke the travel function in the player object and pass in move which is
-    # a cardinal direction n,s,w,e
-    player.travel(move)
-    # add the player's current room to the visited_rooms set
-    visited_rooms.add(player.currentRoom)
-# test if the length of visited room is the length of roomGraph
-# this essentially tests if all of the rooms in the roomGraph have been visited
-if len(visited_rooms) == len(roomGraph):
-    # if it has print test passed, with the length of the traversal path and
-    # the length of visited rooms which should be all of the rooms in roomGraph
-    print(
-        f"TESTS PASSED: {len(traversalPath)} moves, {len(visited_rooms)} rooms visited")
-else:
-    # if all rooms have not been visited print test fail with
-    # how many rooms are left unvisited
-    print("TESTS FAILED: INCOMPLETE TRAVERSAL")
-    print(f"{len(roomGraph) - len(visited_rooms)} unvisited rooms")
-
-
-#######
-# UNCOMMENT TO WALK AROUND
-#######
-# test and functionality to allow the player to walk around and explore rooms
-# player.currentRoom.printRoomDescription(player)
-# while True:
-#     cmds = input("-> ").lower().split(" ")
-#     if cmds[0] in ["n", "s", "e", "w"]:
-#         player.travel(cmds[0], True)
-#     else:
-#         print("I did not understand that command.")
-
 # Queue class to build Queue for BFS
 class Queue():
     def __init__(self):
         self.queue = []
-
     def enqueue(self, value):
         self.queue.append(value)
-
     def dequeue(self):
         if self.size() > 0:
             return self.queue.pop(0)
         else:
             return None
-
     def size(self):
         return (len(self.queue))
-
 # BFS named find_nearest_unexplored
-
-
 def find_nearest_unexplored(graph, starting_room_id):
     q = Queue()
     visited = set()
@@ -119,66 +72,13 @@ def find_nearest_unexplored(graph, starting_room_id):
                 new_path = list(path)
                 new_path.append(neighbor)
                 q.enqueue(new_path)
-
-# Description
-# responsible for filling out the traversalPath with directions that, when walked in
-# order, will visit every room in the RoomGraph at least once.
-# useful commands:
-# player.currentRoom.id
-# player.currentRoom.getExits()
-# player.travel(direction)
-# construct own traversal graph, and fill in the entries as you move along the graph
-# complet when you have exactly 500 entries in your graph and no '?' in adjacency dictionaries
-# todo: write traversal algorithm that logs path into traversalPath as it walks
-
-# Hints*
-# utilize smaller graphs to test traversal method, may be easier to debug
-# start by writing algorithm that picks random unexplored direction from player's current room
-# travels and logs that direction, then loops. This causes player to walk depth-first traversal
-# when you reach a dead-end walk back to nearest room that contains unexplored path.
-# find path to shortest unexplored room by using breadth-first search
-# search for room with a '?' for an exit, bfs code may need modifications
-# 1. instead of searching for vertex, search for exit with '?' as value
-#   if an exit has been explored, put it in your BFS queue like normal
-# 2. BFS will return path as list of room IDs. need to convert this to a list of n/s/e/w
-#   directions before you can add to your traversal path
-
-# while map is not completely explored
-    # For your current room
-    # if there is an unexplored exit in the current room, travel in that direction
-    # else find the nearest room with an unexplored exit and travel there
-    # call bgs to find nearest unexplored
-    # convert room ids to traversal path
-    # walk along that traversal path
-
-# if room doesnt exist
-# if player.currentRoom.id not in graph:
-#     # initialize graph
-#     graph[player.currentRoom.id] = {}
-#     # for each available exit in current room, get exits
-#     for exits in player.currentRoom.getExits():
-#         # assign the exits with questionmark in graph
-#         graph[player.currentRoom.id][exits] = '?'
-#     # randomly choose which way to go
-#     currentRoomExits = graph[player.currentRoom.id]
-#     # available directions in current room
-
-# for directions in currentRoomExits:
-#     if currentRoomExits[directions] == '?':
-#         print(f'directions: {directions}')
-#         dirToMove = directions
-
-
 # initialize graph OUTSIDE of loop
 graph[player.currentRoom.id] = {}
-
 # initialize room id 0 graph exits with '?'
 for exits in player.currentRoom.getExits():
     graph[player.currentRoom.id][exits] = '?'
-
 # inverse directions Dict
 inverseDirections = {'n': 's', 's': 'n', 'w': 'e', 'e': 'w'}
-
 
 # loop through until the length of graph
 while len(graph) < 500:
@@ -250,3 +150,92 @@ while len(graph) < 500:
 print(graph)
 print(traversalPath)
 print(len(traversalPath))
+
+# TRAVERSAL TEST
+# assign visited_rooms to a set
+visited_rooms = set()
+# assign the player's current room to the world's starting room which is set to 0
+player.currentRoom = world.startingRoom
+# add current room that the player is in to the visited room set
+visited_rooms.add(player.currentRoom)
+# loops through the traversal path list and iterates through move
+for move in traversalPath:
+    # invoke the travel function in the player object and pass in move which is
+    # a cardinal direction n,s,w,e
+    player.travel(move)
+    # add the player's current room to the visited_rooms set
+    visited_rooms.add(player.currentRoom)
+# test if the length of visited room is the length of roomGraph
+# this essentially tests if all of the rooms in the roomGraph have been visited
+if len(visited_rooms) == len(roomGraph):
+    # if it has print test passed, with the length of the traversal path and
+    # the length of visited rooms which should be all of the rooms in roomGraph
+    print(
+        f"TESTS PASSED: {len(traversalPath)} moves, {len(visited_rooms)} rooms visited")
+else:
+    # if all rooms have not been visited print test fail with
+    # how many rooms are left unvisited
+    print("TESTS FAILED: INCOMPLETE TRAVERSAL")
+    print(f"{len(roomGraph) - len(visited_rooms)} unvisited rooms")
+
+#######
+# UNCOMMENT TO WALK AROUND
+#######
+# test and functionality to allow the player to walk around and explore rooms
+# player.currentRoom.printRoomDescription(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     else:
+#         print("I did not understand that command.")
+
+
+
+# Description
+# responsible for filling out the traversalPath with directions that, when walked in
+# order, will visit every room in the RoomGraph at least once.
+# useful commands:
+# player.currentRoom.id
+# player.currentRoom.getExits()
+# player.travel(direction)
+# construct own traversal graph, and fill in the entries as you move along the graph
+# complet when you have exactly 500 entries in your graph and no '?' in adjacency dictionaries
+# todo: write traversal algorithm that logs path into traversalPath as it walks
+
+# Hints*
+# utilize smaller graphs to test traversal method, may be easier to debug
+# start by writing algorithm that picks random unexplored direction from player's current room
+# travels and logs that direction, then loops. This causes player to walk depth-first traversal
+# when you reach a dead-end walk back to nearest room that contains unexplored path.
+# find path to shortest unexplored room by using breadth-first search
+# search for room with a '?' for an exit, bfs code may need modifications
+# 1. instead of searching for vertex, search for exit with '?' as value
+#   if an exit has been explored, put it in your BFS queue like normal
+# 2. BFS will return path as list of room IDs. need to convert this to a list of n/s/e/w
+#   directions before you can add to your traversal path
+
+# while map is not completely explored
+    # For your current room
+    # if there is an unexplored exit in the current room, travel in that direction
+    # else find the nearest room with an unexplored exit and travel there
+    # call bgs to find nearest unexplored
+    # convert room ids to traversal path
+    # walk along that traversal path
+
+# if room doesnt exist
+# if player.currentRoom.id not in graph:
+#     # initialize graph
+#     graph[player.currentRoom.id] = {}
+#     # for each available exit in current room, get exits
+#     for exits in player.currentRoom.getExits():
+#         # assign the exits with questionmark in graph
+#         graph[player.currentRoom.id][exits] = '?'
+#     # randomly choose which way to go
+#     currentRoomExits = graph[player.currentRoom.id]
+#     # available directions in current room
+
+# for directions in currentRoomExits:
+#     if currentRoomExits[directions] == '?':
+#         print(f'directions: {directions}')
+#         dirToMove = directions
